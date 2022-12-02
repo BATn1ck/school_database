@@ -24,15 +24,7 @@ class DBFetcher:
         self.TABLE_TEACHERS_TIMETABLE_NAME = 'teachers_timetable'
         self.TABLE_STUDENTS_NAME = 'students'
         self.MAX_LESSON_NUM = 6
-
-    def save_changes(self) -> bool:
-        try:
-            self.db_object.commit()
-        except AttributeError:
-            return False
-
-        return True
-
+        
     def close_db(self):
         self.db_object.close()
 
@@ -94,4 +86,13 @@ class DBFetcher:
             result = result[0]
 
         return result
+
+class DBEditor(DBFetcher):
+    def save_changes(self) -> bool:
+        try:
+            self.db_object.commit()
+        except AttributeError:
+            return False
+
+        return True
 

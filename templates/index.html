@@ -1,4 +1,5 @@
 {% extends "bootstrap/base.html" %}
+{% import "macros.html" as macros %}
 
 {% set week = {
     1: "Пн",
@@ -58,11 +59,7 @@
             </select>
 
             <select name="subject_class" onChange="this.form.submit()">
-            {% if subject_classes %}
-                {% for _class in subject_classes %}
-                    <option value="{{ _class }}">{{ _class }}</option>
-                {% endfor %}
-            {% endif %}
+            {{ macros.insert_options(subject_classes) }}
 
             {% if subject_class %}
                 <option disabled selected hidden>Класс: {{ subject_class }}</option>
@@ -78,62 +75,100 @@
                 <option disabled selected hidden value>Подкласс</option>
             {% endif %}
 
-            {% if subject_subclasses %}
-                {% for subclass in subject_subclasses %}
-                    <option value="{{ subclass }}">{{ subclass }}</option>
-                {% endfor %}
-            {% endif %}
+            {{ macros.insert_options(subject_subclasses) }}
             </select>
 
             <input type="submit" name="subject_get" value="Получить">
         </form>
         <h2>Предмет:
             {% if taked_subject %}
-            <i><b>{{ taked_subject }}</b></i>
+                <i><b>{{ taked_subject }}</b></i>
             {% endif %}
         </h2>
     </div>
 
     <div class='page-header'>
-        <form onsubmit="alert(123);", method="POST">
-            <select>
-            <option disabled selected hidden value>Урок</option>
+        <form method="POST">
+            <select name="teacher_lesson" onChange="this.form.submit()">
+                <option disabled selected hidden value>Урок
+                {% if teacher_lesson %} 
+                    {{ teacher_lesson }}
+                {% endif %}
+                </option>
+                {% if teacher_lessons %}
+                    {% for lesson in teacher_lessons %}
+                        <option value="{{ lesson }}">{{ lesson }}</option>
+                    {% endfor %}
+                {% endif %}
             </select>
-            <select>
-            <option disabled selected hidden value>Класс</option>
+
+            <select name="teacher_class" onChange="this.form.submit()">
+                <option disabled selected hidden value>Класс</option>
+                {% if teacher_class %}
+                    {{ teacher_class }}
+                {% endif %}
+                {% for class_num in range(1, amount_classes+1) %}
+                    <option value="{{ class_num }}">{{ class_num }}</option>
+                {% endfor %}
             </select>
-            <select>
-            <option disabled selected hidden value>Подкласс</option>
+
+            <select name="teacher_subclass" onChange="this.form.submit()">
+                <option disabled selected hidden value>Подкласс</option>
+                {% if subclasses %}
+                    {% for subclass in subclasses %}
+                        <option value="{{ subclass }}">{{ subclass }}</option>
+                    {% endfor %}
+                {% endif %}
             </select>
+
             <input type="submit" value="Получить">
         </form>
-        <h2>Учитель:</h2>
+        <h2>Учитель:
+            {% if taked_teacher %}
+                <i><b>{{ taked_teacher }}</b></i>
+            {% endif %}
+        </h2>
     </div>
 
     <div class='page-header'>
-        <form onsubmit="alert(123);", method="POST">
-            <select>
-            <option disabled selected hidden value>День недели</option>
-            {% for day in week.keys() %}
-                <option value="{{ day }}">{{ week[day] }}</option>
-            {% endfor %}
+        <form method="POST">
+            <select name="cabinet_class_week_day" onChange="this.form.submit()">
+                <option disabled selected hidden value>День недели</option>
+                    {% for day in week.keys() %}
+                        <option value="{{ day }}">{{ week[day] }}</option>
+                    {% endfor %}
             </select>
-            <select>
-            <option disabled selected hidden value>Урок</option>
+
+            <select name="cabinet_class_lesson_number" onChange="this.form.submit()">
+                <option disabled selected hidden value>Номер урока</option>
+                {% for lesson_num in range(1, max_lessons_number+1) %}
+                    <option value="{{ lesson }}">{{ lesson_num }}</option>
+                {% endfor %}
             </select>
-            <select>
-            <option disabled selected hidden value>Класс</option>
+
+            <select name="cabinet_class_class" onChange="this.form.submit()">
+                <option disabled selected hidden value>Класс</option>
+                {% for class_num in range(1, amount_classes+1) %}
+                    <option value="{{ class_num }}">{{ class_num }}</option>
+                {% endfor %}
             </select>
-            <select>
-            <option disabled selected hidden value>Подкласс</option>
+
+            <select name="cabinet_class_subclass" onChange="this.form.submit()">
+                <option disabled selected hidden value>Подкласс</option>
+                {% if subclasses %}
+                    {% for subclass in subclasses %}
+                        <option value="{{ subclass }}">{{ subclass }}</option>
+                    {% endfor %}
+                {% endif %}
             </select>
+
             <input type="submit" value="Получить">
         </form>
         <h2>Кабинет класса:</h2>
     </div>
 
     <div class='page-header'>
-        <form onsubmit="alert(123);", method="POST">
+        <form method="POST">
             <select>
             <option disabled selected hidden value>Фамилия учителя</option>
             </select>
@@ -162,12 +197,15 @@
                 <option value="{{ day }}">{{ week[day] }}</option>
             {% endfor %}
             </select>
+
             <select>
             <option disabled selected hidden value>Класс</option>
             </select>
+
             <select>
             <option disabled selected hidden value>Подкласс</option>
             </select>
+
             <input type="submit" value="Получить">
         </form>
         <h2>Расписание класса:</h2>

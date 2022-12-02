@@ -1,0 +1,7 @@
+{% macro insert_options(options) %}
+    {% if options %}
+        {% for option in options %}
+            <option value="{{ option }}">{{ option }}</option>
+        {% endfor %}
+    {% endif %}
+{% endmacro %}
