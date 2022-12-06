@@ -5,3 +5,11 @@
         {% endfor %}
     {% endif %}
 {% endmacro %}
+
+{% macro if_option_selected(text, option) %}
+    {% if option %}
+        <option disabled selected hidden value>{{ text }}: {{ option }}</option>
+    {% else %}
+        <option disabled selected hidden value>{{ text }}</option>
+    {% endif %}
+{% endmacro %}

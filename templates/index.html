@@ -59,23 +59,13 @@
             </select>
 
             <select name="subject_class" onChange="this.form.submit()">
-            {{ macros.insert_options(subject_classes) }}
-
-            {% if subject_class %}
-                <option disabled selected hidden>Класс: {{ subject_class }}</option>
-            {% else %}
-                <option disabled selected hidden value>Класс</option>
-            {% endif %}
+                {{ macros.if_option_selected("Класс", subject_class) }}
+                {{ macros.insert_options(subject_classes) }}
             </select>
 
             <select name="subject_subclass" onChange="this.form.submit()">
-            {% if subject_subclass %}
-                <option disabled selected hidden value>Подкласс: {{ subject_subclass }}</option>
-            {% else %}
-                <option disabled selected hidden value>Подкласс</option>
-            {% endif %}
-
-            {{ macros.insert_options(subject_subclasses) }}
+                {{ macros.if_option_selected("Подкласс", subject_subclass) }}
+                {{ macros.insert_options(subject_subclasses) }}
             </select>
 
             <input type="submit" name="subject_get" value="Получить">
@@ -90,38 +80,21 @@
     <div class='page-header'>
         <form method="POST">
             <select name="teacher_lesson" onChange="this.form.submit()">
-                <option disabled selected hidden value>Урок
-                {% if teacher_lesson %} 
-                    {{ teacher_lesson }}
-                {% endif %}
-                </option>
-                {% if teacher_lessons %}
-                    {% for lesson in teacher_lessons %}
-                        <option value="{{ lesson }}">{{ lesson }}</option>
-                    {% endfor %}
-                {% endif %}
+                {{ macros.if_option_selected("Урок", teacher_lesson) }}
+                {{ macros.insert_options(teacher_lessons) }}
             </select>
 
             <select name="teacher_class" onChange="this.form.submit()">
-                <option disabled selected hidden value>Класс</option>
-                {% if teacher_class %}
-                    {{ teacher_class }}
-                {% endif %}
-                {% for class_num in range(1, amount_classes+1) %}
-                    <option value="{{ class_num }}">{{ class_num }}</option>
-                {% endfor %}
+                {{ macros.if_option_selected("Класс", teacher_class) }}
+                {{ macros.insert_options(teacher_classes) }}
             </select>
 
             <select name="teacher_subclass" onChange="this.form.submit()">
-                <option disabled selected hidden value>Подкласс</option>
-                {% if subclasses %}
-                    {% for subclass in subclasses %}
-                        <option value="{{ subclass }}">{{ subclass }}</option>
-                    {% endfor %}
-                {% endif %}
+                {{ macros.if_option_selected("Подкласс", teacher_subclass) }}
+                {{ macros.insert_options(teacher_subclasses) }}
             </select>
 
-            <input type="submit" value="Получить">
+            <input type="submit" name="teacher_get" value="Получить">
         </form>
         <h2>Учитель:
             {% if taked_teacher %}

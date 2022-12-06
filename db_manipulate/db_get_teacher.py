@@ -46,26 +46,75 @@ def handle_teacher(values_dict: dict, session, DBReader) -> str | None:
             type(DBReader) is not db_connector.DBFetcher:
         return result
 
-    if "teacher_lesson" in values_dict.keys():
-        if type(values_dict["teacher_lesson"]) is str:
-            if get_session_variable("teacher_lesson") != values_dict["teacher_lesson"]:
-                session["teacher_lesson"] = values_dict["teacher_lesson"]
-                session["teacher_class"] = 0
-                session["teacher_subclass"] = ''
+    if "teacher_lesson" in values_dict.keys() and \
+            type(values_dict["teacher_lesson"]) is str:
+        if get_session_variable("teacher_lesson") != values_dict["teacher_lesson"]:
+            session["teacher_lesson"] = values_dict["teacher_lesson"]
+            session["teacher_class"] = 0
+            session["teacher_subclasses"] = []
+            session["teacher_subclass"] = ''
+
+            query = \
+                '''
+                SELECT class FROM {}
+                WHERE subject = "{}"
+                '''.format(
+                    DBReader.TABLE_TEACHERS_NAME,
+                    get_session_variable('teacher_lesson')
+                )
+
+            classes = DBReader.send_query(query)
+            classes = list(map(lambda x: x[0] if x else '', classes))
+            temp_arr = []
+            
+            for cl in classes:
+                if cl not in temp_arr:
+                    temp_arr.append(cl)
+            
+            temp_arr.sort()
+            session["teacher_classes"] = temp_arr
 
     if "teacher_class" in values_dict.keys() and \
-            get_session_variable("teacher_lesson"):
-        if type(values_dict["teacher_class"]) is str:
-            if get_session_variable("teacher_class") != values_dict["teacher_class"]:
-                session["teacher_class"] = values_dict["teacher_class"]
-                session["teacher_subclass"] = ''
+            get_session_variable("teacher_lesson") and \
+            type(values_dict["teacher_class"]) is str:
+        if get_session_variable("teacher_class") != values_dict["teacher_class"]:
+            session["teacher_class"] = values_dict["teacher_class"]
+            session["teacher_subclass"] = ''
+
+            query = \
+                '''
+                SELECT subclass FROM {}
+                WHERE subject = "{}"
+                AND class = {}
+                '''.format(
+                    DBReader.TABLE_TEACHERS_NAME,
+                    get_session_variable('teacher_lesson'),
+                    get_session_variable('teacher_class')
+                )
+
+            subclasses = DBReader.send_query(query)
+            subclasses = list(map(lambda x: str(x[0]) if x else '', subclasses))
+            temp_arr = []
+            
+            for cl in subclasses:
+                if cl not in temp_arr:
+                    temp_arr.append(cl)
+            
+            temp_arr.sort()
+            session["teacher_subclasses"] = subclasses
 
     if "teacher_subclass" in values_dict.keys() and \
             get_session_variable("teacher_lesson") and \
-            get_session_variable("teacher_class"):
-        if type(values_dict["teacher_subclass"]) is str and \
-                len(values_dict["teacher_subclass"]) == 1:
+            get_session_variable("teacher_class") and \
+            type(values_dict["teacher_subclass"]) is str and \
+            len(values_dict["teacher_subclass"]) == 1:
+
             session['teacher_subclass'] = values_dict['teacher_subclass']
+
+    if "teacher_get" in values_dict.keys() and \
+            get_session_variable("teacher_lesson") and \
+            get_session_variable("teacher_class") and \
+            get_session_variable("teacher_subclass"):
 
             query = \
                 """
@@ -80,9 +129,9 @@ def handle_teacher(values_dict: dict, session, DBReader) -> str | None:
                     get_session_variable('teacher_subclass')
                 )
 
-            print(query)
             result = DBReader.send_query(query)
-            
-            result = ' '.join(list(map(lambda x: x[0] if x else '', result)))
+
+            if result:
+                result = ' '.join([i for i in result[0]])
 
     return result

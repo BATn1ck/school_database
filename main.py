@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 import secrets 
-
 from db_manipulate import db_connector, db_get_subject, db_get_teacher
 from flask import Flask, render_template, request, session, redirect
 from flask_bootstrap import Bootstrap
@@ -41,10 +40,11 @@ def main():
 
         teacher_lessons=teacher_lessons, \
         teacher_lesson=get_session_variable("teacher_lesson"), \
+        teacher_classes=get_session_variable("teacher_classes"), \
         teacher_class=get_session_variable("teacher_class"), \
-        taked_teacher=get_session_variable("taked_teacher"), \
-
-        subclasses=teacher_subclasses
+        teacher_subclasses=get_session_variable("teacher_subclasses"), \
+        teacher_subclass=get_session_variable("teacher_subclass"), \
+        taked_teacher=get_session_variable("taked_teacher")
     )
 
 if __name__ == "__main__":
