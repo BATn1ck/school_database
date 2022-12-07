@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import secrets 
-from db_manipulate import db_connector, db_get_subject, db_get_teacher
+from db_manipulate import db_connector, db_get_subject, db_get_teacher, db_get_cabinet_class
 from flask import Flask, render_template, request, session, redirect
 from flask_bootstrap import Bootstrap
 
@@ -19,12 +19,16 @@ def main():
         #print(values_dict)
         taked_subject = db_get_subject.handle_subject(values_dict, session, DBReader)
         taked_teacher = db_get_teacher.handle_teacher(values_dict, session, DBReader)
+        taked_cabinet_class = db_get_cabinet_class.handle_cabinet_class(values_dict, session, DBReader)
         
         if taked_subject:
             session['taked_subject'] = taked_subject
 
         if taked_teacher:
             session['taked_teacher'] = taked_teacher
+
+        if taked_cabinet_class:
+            session['taked_cabinet_class'] = taked_cabinet_class
 
         return redirect('/')
 
@@ -44,7 +48,15 @@ def main():
         teacher_class=get_session_variable("teacher_class"), \
         teacher_subclasses=get_session_variable("teacher_subclasses"), \
         teacher_subclass=get_session_variable("teacher_subclass"), \
-        taked_teacher=get_session_variable("taked_teacher")
+        taked_teacher=get_session_variable("taked_teacher"), \
+
+        cabinet_class_day_week=get_session_variable("cabinet_class_day_week"), \
+        cabinet_class_lesson_num=get_session_variable("cabinet_class_lesson_num"), \
+        cabinet_class_class=get_session_variable("cabinet_class_class"), \
+        cabinet_class_classes=get_session_variable("cabinet_class_classes"), \
+        cabinet_class_subclasses=get_session_variable("cabinet_class_subclasses"), \
+        cabinet_class_subclass=get_session_variable("cabinet_class_subclass"), \
+        taked_cabinet_class=get_session_variable("taked_cabinet_class")
     )
 
 if __name__ == "__main__":

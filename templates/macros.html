@@ -13,3 +13,9 @@
         <option disabled selected hidden value>{{ text }}</option>
     {% endif %}
 {% endmacro %}
+
+{% macro insert_taked(taked_text) %}
+    {% if taked_text %}
+        <i><b>{{ taked_text }}</b></i>
+    {% endif %}
+{% endmacro %}

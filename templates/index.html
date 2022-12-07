@@ -97,47 +97,41 @@
             <input type="submit" name="teacher_get" value="Получить">
         </form>
         <h2>Учитель:
-            {% if taked_teacher %}
-                <i><b>{{ taked_teacher }}</b></i>
-            {% endif %}
+            {{ macros.insert_taked(taked_teacher) }}
         </h2>
     </div>
 
     <div class='page-header'>
         <form method="POST">
-            <select name="cabinet_class_week_day" onChange="this.form.submit()">
-                <option disabled selected hidden value>День недели</option>
-                    {% for day in week.keys() %}
-                        <option value="{{ day }}">{{ week[day] }}</option>
-                    {% endfor %}
+            <select name="cabinet_class_day_week" onChange="this.form.submit()">
+                {{ macros.if_option_selected("День недели", week[cabinet_class_day_week]) }}
+                {% for day in week.keys() %}
+                    <option value="{{ day }}">{{ week[day] }}</option>
+                {% endfor %}
             </select>
 
-            <select name="cabinet_class_lesson_number" onChange="this.form.submit()">
-                <option disabled selected hidden value>Номер урока</option>
+            <select name="cabinet_class_lesson_num" onChange="this.form.submit()">
+                {{ macros.if_option_selected("Номер урока", cabinet_class_lesson_num) }}
                 {% for lesson_num in range(1, max_lessons_number+1) %}
-                    <option value="{{ lesson }}">{{ lesson_num }}</option>
+                    <option value="{{ lesson_num }}">{{ lesson_num }}</option>
                 {% endfor %}
             </select>
 
             <select name="cabinet_class_class" onChange="this.form.submit()">
-                <option disabled selected hidden value>Класс</option>
-                {% for class_num in range(1, amount_classes+1) %}
-                    <option value="{{ class_num }}">{{ class_num }}</option>
-                {% endfor %}
+                {{ macros.if_option_selected("Класс", cabinet_class_class) }}
+                {{ macros.insert_options(cabinet_class_classes) }}
             </select>
 
             <select name="cabinet_class_subclass" onChange="this.form.submit()">
-                <option disabled selected hidden value>Подкласс</option>
-                {% if subclasses %}
-                    {% for subclass in subclasses %}
-                        <option value="{{ subclass }}">{{ subclass }}</option>
-                    {% endfor %}
-                {% endif %}
+                {{ macros.if_option_selected("Подкласс", cabinet_class_subclass) }}
+                {{ macros.insert_options(cabinet_class_subclasses) }}
             </select>
 
-            <input type="submit" value="Получить">
+            <input type="submit" name="cabinet_class_get" value="Получить">
         </form>
-        <h2>Кабинет класса:</h2>
+        <h2>Кабинет класса:
+            {{ macros.insert_taked(taked_cabinet_class) }}
+        </h2>
     </div>
 
     <div class='page-header'>
