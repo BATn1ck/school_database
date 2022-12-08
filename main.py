@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 import secrets 
-from db_manipulate import db_connector, db_get_subject, db_get_teacher, db_get_cabinet_class
+
+from db_manipulate import db_connector, \
+        db_get_subject, \
+        db_get_teacher, \
+        db_get_cabinet_class, \
+        db_get_teacher_classes
+
 from flask import Flask, render_template, request, session, redirect
 from flask_bootstrap import Bootstrap
 
@@ -16,10 +22,10 @@ def main():
     taked_subject = '' 
     if request.method == 'POST':
         values_dict = request.values.to_dict()
-        #print(values_dict)
         taked_subject = db_get_subject.handle_subject(values_dict, session, DBReader)
         taked_teacher = db_get_teacher.handle_teacher(values_dict, session, DBReader)
         taked_cabinet_class = db_get_cabinet_class.handle_cabinet_class(values_dict, session, DBReader)
+        taked_teacher_classes = db_get_teacher_classes.handle_teacher_classes(values_dict, session, DBReader)
         
         if taked_subject:
             session['taked_subject'] = taked_subject
@@ -29,6 +35,9 @@ def main():
 
         if taked_cabinet_class:
             session['taked_cabinet_class'] = taked_cabinet_class
+
+        if taked_teacher_classes:
+            session['taked_teacher_classes'] = taked_teacher_classes
 
         return redirect('/')
 
@@ -56,10 +65,20 @@ def main():
         cabinet_class_classes=get_session_variable("cabinet_class_classes"), \
         cabinet_class_subclasses=get_session_variable("cabinet_class_subclasses"), \
         cabinet_class_subclass=get_session_variable("cabinet_class_subclass"), \
-        taked_cabinet_class=get_session_variable("taked_cabinet_class")
+        taked_cabinet_class=get_session_variable("taked_cabinet_class"), \
+
+        teacher_classes_first_names=db_get_teacher_classes.get_teachers_first_names(DBReader), \
+        teacher_classes_first_name=get_session_variable("teacher_classes_first_name"), \
+        teacher_classes_second_names=get_session_variable("teacher_classes_second_names"), \
+        teacher_classes_second_name=get_session_variable("teacher_classes_second_name"), \
+        teacher_classes_third_names=get_session_variable("teacher_classes_third_names"), \
+        teacher_classes_third_name=get_session_variable("teacher_classes_third_name"), \
+        teacher_classes_subjects=get_session_variable("teacher_classes_subjects"), \
+        teacher_classes_subject=get_session_variable("teacher_classes_subject"), \
+        taked_teacher_classes=get_session_variable("taked_teacher_classes")
     )
 
 if __name__ == "__main__":
     DBReader = db_connector.DBFetcher(host="localhost", database="school", user="root", password="1234")
     teacher_lessons, teacher_subclasses = db_get_teacher.get_teacher_info(DBReader)
-    app.run(debug=True)
+    app.run(host='0.0.0.0', debug=True)

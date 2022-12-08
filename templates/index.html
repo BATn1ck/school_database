@@ -136,24 +136,31 @@
 
     <div class='page-header'>
         <form method="POST">
-            <select>
-            <option disabled selected hidden value>Фамилия учителя</option>
+            <select name="teacher_classes_first_name" onChange="this.form.submit()">
+                {{ macros.if_option_selected("Фамилия учителя", teacher_classes_first_name) }}
+                {{ macros.insert_options(teacher_classes_first_names) }}
             </select>
-            <select>
-            <option disabled selected hidden value>Имя учителя</option>
+
+            <select name="teacher_classes_second_name" onChange="this.form.submit()">
+                {{ macros.if_option_selected("Имя учителя", teacher_classes_second_name) }}
+                {{ macros.insert_options(teacher_classes_second_names) }}
             </select>
-            <select>
-            <option disabled selected hidden value>Отчество учителя</option>
+
+            <select name="teacher_classes_third_name" onChange="this.form.submit()">
+                {{ macros.if_option_selected("Отчество учителя", teacher_classes_third_name) }}
+                {{ macros.insert_options(teacher_classes_third_names) }}
             </select>
-            <select>
-            <option disabled selected hidden value>Класс</option>
+
+            <select name="teacher_classes_subject" onChange="this.form.submit()">
+                {{ macros.if_option_selected("Предмет", teacher_classes_subject) }}
+                {{ macros.insert_options(teacher_classes_subjects) }}
             </select>
-            <select>
-            <option disabled selected hidden value>Подкласс</option>
-            </select>
-            <input type="submit" value="Получить">
+
+            <input type="submit" name="teacher_classes_get" value="Получить">
         </form>
-        <h2>Преподаваемые классы:</h2>
+        <h2>Преподаваемые классы:
+            {{ macros.insert_taked(taked_teacher_classes) }}
+        </h2>
     </div>
 
     <div class='page-header'>
