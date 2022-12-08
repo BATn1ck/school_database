@@ -165,24 +165,33 @@
 
     <div class='page-header'>
         <form method="POST">
-            <select>
-            <option disabled selected hidden value>День недели</option>
-            {% for day in week.keys() %}
-                <option value="{{ day }}">{{ week[day] }}</option>
-            {% endfor %}
+            <select name="timetable_class_day_week" onChange="this.form.submit()">
+                {{ macros.if_option_selected("День недели", week[timetable_class_day_week]) }}
+                {% for day in week.keys() %}
+                    <option value="{{ day }}">{{ week[day] }}</option>
+                {% endfor %}
             </select>
 
-            <select>
-            <option disabled selected hidden value>Класс</option>
+            <select name="timetable_class_class" onChange="this.form.submit()">
+                {{ macros.if_option_selected("Класс", timetable_class_class) }}
+                {{ macros.insert_options(timetable_class_classes) }}
             </select>
 
-            <select>
-            <option disabled selected hidden value>Подкласс</option>
+            <select name="timetable_class_subclass" onChange="this.form.submit()">
+                {{ macros.if_option_selected("Подкласс", timetable_class_subclass) }}
+                {{ macros.insert_options(timetable_class_subclasses) }}
             </select>
 
-            <input type="submit" value="Получить">
+            <input type="submit" name="timetable_class_get" value="Получить">
         </form>
-        <h2>Расписание класса:</h2>
+
+        <h2>Расписание класса:
+            {% if taked_timetable_class %}
+                {% for lesson in taked_timetable_class %}
+                    <li>{{ lesson }}</li>
+                {% endfor %}
+            {% endif %}
+        </h2>
     </div>
 
     </div>

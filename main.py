@@ -5,7 +5,8 @@ from db_manipulate import db_connector, \
         db_get_subject, \
         db_get_teacher, \
         db_get_cabinet_class, \
-        db_get_teacher_classes
+        db_get_teacher_classes, \
+        db_get_timetable_class
 
 from flask import Flask, render_template, request, session, redirect
 from flask_bootstrap import Bootstrap
@@ -26,6 +27,7 @@ def main():
         taked_teacher = db_get_teacher.handle_teacher(values_dict, session, DBReader)
         taked_cabinet_class = db_get_cabinet_class.handle_cabinet_class(values_dict, session, DBReader)
         taked_teacher_classes = db_get_teacher_classes.handle_teacher_classes(values_dict, session, DBReader)
+        taked_timetable_class = db_get_timetable_class.handle_timetable_class(values_dict, session, DBReader)
         
         if taked_subject:
             session['taked_subject'] = taked_subject
@@ -38,6 +40,9 @@ def main():
 
         if taked_teacher_classes:
             session['taked_teacher_classes'] = taked_teacher_classes
+        
+        if taked_timetable_class:
+            session['taked_timetable_class'] = taked_timetable_class
 
         return redirect('/')
 
@@ -75,7 +80,14 @@ def main():
         teacher_classes_third_name=get_session_variable("teacher_classes_third_name"), \
         teacher_classes_subjects=get_session_variable("teacher_classes_subjects"), \
         teacher_classes_subject=get_session_variable("teacher_classes_subject"), \
-        taked_teacher_classes=get_session_variable("taked_teacher_classes")
+        taked_teacher_classes=get_session_variable("taked_teacher_classes"), \
+
+        timetable_class_day_week=get_session_variable("timetable_class_day_week"), \
+        timetable_class_classes=get_session_variable("timetable_class_classes"), \
+        timetable_class_class=get_session_variable("timetable_class_class"), \
+        timetable_class_subclasses=get_session_variable("timetable_class_subclasses"), \
+        timetable_class_subclass=get_session_variable("timetable_class_subclass"), \
+        taked_timetable_class=get_session_variable("taked_timetable_class")
     )
 
 if __name__ == "__main__":
