@@ -1,0 +1,112 @@
+{% extends "layout.html" %}
+{% import "macros.html" as macros %}
+
+{% macro insert_form_value(form_attr) %}
+    {% if form_attr %}
+        {{ form_attr.label }} {{ form_attr() }}
+    {% endif %}
+{% endmacro %}
+
+{% block content %}
+<div class='container'>
+    <div class='page-header'>
+        <h2>Добавление нового учителя:</h2>
+
+        <form method="POST">
+            {{ form_teacher.hidden_tag() }}
+
+            {{ insert_form_value(form_teacher.first_name) }}
+            {{ insert_form_value(form_teacher.second_name) }}
+            {{ insert_form_value(form_teacher.third_name) }}
+            <br>
+
+            {{ insert_form_value(form_teacher.lesson) }}
+            {{ insert_form_value(form_teacher.cabinet_num) }}
+            <br>
+
+            {{ insert_form_value(form_teacher.class_num) }}
+            {{ insert_form_value(form_teacher.subclass) }}
+            <br>
+            {{ form_teacher.submit() }}
+        </form>
+    </div>
+
+    <div class='page-header'>
+        <h2>Удаление ученика:</h2>
+
+        <form method="POST">
+            <select name="student_delete_class" onChange="this.form.submit()">
+                {{ macros.if_option_selected("Класс", student_delete_class) }}
+                {{ macros.insert_options(range(1, macros.amount_classes+1)) }}
+            </select>
+
+            <select name="student_delete_subclass" onChange="this.form.submit()">
+                {{ macros.if_option_selected("Подкласс", student_delete_subclass) }}
+                {{ macros.insert_options(student_delete_subclasses) }}
+            </select>
+
+            <select name="student_delete_first_name" onChange="this.form.submit()">
+                {{ macros.if_option_selected("Фамилия", student_delete_first_name) }}
+                {{ macros.insert_options(student_delete_first_names) }}
+            </select>
+
+            <select name="student_delete_second_name" onChange="this.form.submit()">
+                {{ macros.if_option_selected("Имя", student_delete_second_name) }}
+                {{ macros.insert_options(student_delete_second_names) }}
+            </select>
+
+            <select name="student_delete_third_name" onChange="this.form.submit()">
+                {{ macros.if_option_selected("Отчество", student_delete_third_name) }}
+                {{ macros.insert_options(student_delete_third_names) }}
+            </select>
+
+            <br>
+            <input type="submit" name="subject_get" value="Удалить">
+        </form>
+    </div>
+
+    <div class='page-header'>
+        <h2>Изменение оценки ученика:</h2>
+
+        <form method="POST">
+            <select name="student_grade_class" onChange="this.form.submit()">
+                {{ macros.if_option_selected("Класс", student_grade_class) }}
+                {{ macros.insert_options(range(1, macros.amount_classes+1)) }}
+            </select>
+
+            <select name="student_grade_subclass" onChange="this.form.submit()">
+                {{ macros.if_option_selected("Подкласс", student_grade_subclass) }}
+                {{ macros.insert_options(student_grade_subclasses) }}
+            </select>
+
+            <select name="student_grade_first_name" onChange="this.form.submit()">
+                {{ macros.if_option_selected("Фамилия", student_grade_first_name) }}
+                {{ macros.insert_options(student_grade_first_names) }}
+            </select>
+
+            <select name="student_grade_second_name" onChange="this.form.submit()">
+                {{ macros.if_option_selected("Имя", student_grade_second_name) }}
+                {{ macros.insert_options(student_grade_second_names) }}
+            </select>
+
+            <select name="student_grade_third_name" onChange="this.form.submit()">
+                {{ macros.if_option_selected("Отчество", student_grade_third_name) }}
+                {{ macros.insert_options(student_grade_third_names) }}
+            </select>
+
+            <select name="student_grade_third_name" onChange="this.form.submit()">
+                {{ macros.if_option_selected("Предмет", student_grade_subject) }}
+                {{ macros.insert_options(student_grade_subjects) }}
+            </select>
+
+            <select name="student_grade_grade" onChange="this.form.submit()">
+                {{ macros.if_option_selected("Оценка", student_grade_grade) }}
+                {{ macros.insert_options(range(1, 6)) }}
+            </select>
+
+            <br>
+            <input type="submit" name="subject_get" value="Удалить">
+        </form>
+    </div>
+</div>
+{% endblock %}

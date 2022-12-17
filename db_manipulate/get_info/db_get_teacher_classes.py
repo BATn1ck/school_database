@@ -31,6 +31,10 @@ def handle_teacher_classes(values_dict: dict, session, DBReader) -> str | None:
         if first_name and type(first_name) is str and \
                 get_session_variable('teacher_classes_first_name') != first_name:
             session['teacher_classes_first_name'] = first_name
+            session['teacher_classes_second_name'] = ''
+            session['teacher_classes_third_name'] = ''
+            session['teacher_classes_subject'] = []
+
             query = \
                 '''
                 SELECT DISTINCT second_name FROM {}
@@ -54,6 +58,8 @@ def handle_teacher_classes(values_dict: dict, session, DBReader) -> str | None:
         if second_name and type(second_name) is str and \
                 get_session_variable('teacher_classes_second_name') != second_name:
             session['teacher_classes_second_name'] = second_name
+            session['teacher_classes_third_name'] = ''
+            session['teacher_classes_subject'] = []
             query = \
                 '''
                 SELECT DISTINCT third_name FROM {}
@@ -80,6 +86,7 @@ def handle_teacher_classes(values_dict: dict, session, DBReader) -> str | None:
         if third_name and type(third_name) is str and \
                 get_session_variable('teacher_classes_third_name') != third_name:
             session['teacher_classes_third_name'] = third_name
+            session['teacher_classes_subject'] = []
             query = \
                 '''
                 SELECT DISTINCT subject FROM {}

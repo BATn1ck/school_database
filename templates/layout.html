@@ -1,0 +1,22 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}База данных{% endblock %}
+
+{% block navbar %}
+<div class='navbar navbar-inverse' role='navigation'>
+    <div class='container'>
+        <div class='navbar-header'>
+            <button type='button' class='navbar-toggle'
+             data-toggle='collapse' data-target='.navbar-collapse'>
+                <span class='sr-only'>Toggle navigation</span>
+                <span class='icon-bar'></span>
+                <span class='icon-bar'></span>
+                <span class='icon-bar'></span>
+            </button>
+            <a class='navbar-brand' href='/'>Получение информации</a>
+            <a class='navbar-brand' href='/change_info.html'>Изменение информации</a>
+            <a class='navbar-brand' href='/get_inquiry.html'>Получение справок</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,36 +1,5 @@
-{% extends "bootstrap/base.html" %}
+{% extends "layout.html" %}
 {% import "macros.html" as macros %}
-
-{% set week = {
-    1: "Пн",
-    2: "Вт",
-    3: "Ср", 
-    4: "Чт", 
-    5: "Пт",
-    6: "Сб"
-} %}
-{% set amount_classes = 11 %}
-{% set max_lessons_number = 6 %}
-
-{% block title %}База данных{% endblock %}
-
-{% block navbar %}
-<div class='navbar navbar-inverse' role='navigation'>
-    <div class='container'>
-        <div class='navbar-header'>
-            <button type='button' class='navbar-toggle'
-             data-toggle='collapse' data-target='.navbar-collapse'>
-                <span class='sr-only'>Toggle navigation</span>
-                <span class='icon-bar'></span>
-                <span class='icon-bar'></span>
-                <span class='icon-bar'></span>
-            </button>
-            <a class='navbar-brand' href='/'>Получение информации</a>
-            <a class='navbar-brand' href='/change.html'>Изменение информации</a>
-        </div>
-    </div>
-</div>
-{% endblock %}
 
 {% block content %}
 <div class='container'>
@@ -38,22 +7,22 @@
         <form method="POST">
             <select name="subject_day_week" onChange="this.form.submit()">
             {% if subject_day_week and subject_day_week > 0 and subject_day_week < 7 %}
-                <option selected hidden>День недели: {{ week[subject_day_week] }}</option>
+                <option selected hidden>День недели: {{ macros.week[subject_day_week] }}</option>
             {% else %}
                 <option disabled selected hidden>День недели</option>
             {% endif %}
-            {% for day in week.keys() %}
-                <option value="{{ day }}">{{ week[day] }}</option>
+            {% for day in macros.week.keys() %}
+                <option value="{{ day }}">{{ macros.week[day] }}</option>
             {% endfor %}
             </select>
 
             <select name="subject_lesson_num" onChange="this.form.submit()">
-            {% if subject_lesson_num and subject_lesson_num > 0 and subject_lesson_num <= max_lessons_number %}
+            {% if subject_lesson_num and subject_lesson_num > 0 and subject_lesson_num <= macros.max_lessons_number %}
                 <option disabled selected hidden>Номер урока: {{ subject_lesson_num }}</option>
             {% else %}
                 <option disabled selected hidden value>Номер урока</option>
             {% endif %}
-            {% for lesson in range(1, max_lessons_number+1) %}
+            {% for lesson in range(1, macros.max_lessons_number+1) %}
                 <option value="{{ lesson }}">{{ lesson }}</option>
             {% endfor %}
             </select>
@@ -104,15 +73,15 @@
     <div class='page-header'>
         <form method="POST">
             <select name="cabinet_class_day_week" onChange="this.form.submit()">
-                {{ macros.if_option_selected("День недели", week[cabinet_class_day_week]) }}
-                {% for day in week.keys() %}
-                    <option value="{{ day }}">{{ week[day] }}</option>
+                {{ macros.if_option_selected("День недели", macros.week[cabinet_class_day_week]) }}
+                {% for day in macros.week.keys() %}
+                    <option value="{{ day }}">{{ macros.week[day] }}</option>
                 {% endfor %}
             </select>
 
             <select name="cabinet_class_lesson_num" onChange="this.form.submit()">
                 {{ macros.if_option_selected("Номер урока", cabinet_class_lesson_num) }}
-                {% for lesson_num in range(1, max_lessons_number+1) %}
+                {% for lesson_num in range(1, macros.max_lessons_number+1) %}
                     <option value="{{ lesson_num }}">{{ lesson_num }}</option>
                 {% endfor %}
             </select>
@@ -166,9 +135,9 @@
     <div class='page-header'>
         <form method="POST">
             <select name="timetable_class_day_week" onChange="this.form.submit()">
-                {{ macros.if_option_selected("День недели", week[timetable_class_day_week]) }}
-                {% for day in week.keys() %}
-                    <option value="{{ day }}">{{ week[day] }}</option>
+                {{ macros.if_option_selected("День недели", macros.week[timetable_class_day_week]) }}
+                {% for day in macros.week.keys() %}
+                    <option value="{{ day }}">{{ macros.week[day] }}</option>
                 {% endfor %}
             </select>
 

@@ -1,14 +1,18 @@
 #!/usr/bin/env python
 import secrets 
 
-from db_manipulate import db_connector, \
-        db_get_subject, \
+from school_web_forms import TeacherForm
+from db_manipulate import db_connector
+
+from db_manipulate.change_info import db_change_add_teacher
+
+from db_manipulate.get_info import db_get_subject, \
         db_get_teacher, \
         db_get_cabinet_class, \
         db_get_teacher_classes, \
         db_get_timetable_class
 
-from flask import Flask, render_template, request, session, redirect
+from flask import Flask, render_template, request, session, redirect, flash
 from flask_bootstrap import Bootstrap
 
 app = Flask(__name__)
@@ -18,9 +22,32 @@ bootstrap = Bootstrap(app)
 get_session_variable = lambda session_variable: \
         session[session_variable] if session_variable in session.keys() else None
 
+@app.route("/change_info.html", methods=['GET', 'POST'])
+def change_info():
+    form_teacher = TeacherForm()
+
+    if request.method == 'POST':
+        #print(request.values)
+
+        if form_teacher.validate_on_submit():
+            res = db_change_add_teacher.add_teacher(form_teacher, DBWriter)
+
+            form_teacher.first_name.data = ''
+            form_teacher.second_name.data = ''
+            form_teacher.third_name.data = ''
+            form_teacher.lesson = ''
+            form_teacher.cabinet_num = ''
+            form_teacher.class_num = ''
+            form_teacher.subclass = ''
+
+        return redirect(request.url)
+
+    return render_template('change_info.html', \
+            form_teacher=form_teacher
+    )
+
 @app.route("/", methods=['GET', 'POST'])
-def main():
-    taked_subject = '' 
+def get_info():
     if request.method == 'POST':
         values_dict = request.values.to_dict()
         taked_subject = db_get_subject.handle_subject(values_dict, session, DBReader)
@@ -47,7 +74,7 @@ def main():
         return redirect('/')
 
     #print(session)
-    return render_template('index.html', \
+    return render_template('get_info.html', \
         subject_day_week=get_session_variable("subject_day_week"), \
         subject_lesson_num=get_session_variable("subject_lesson_num"), \
         subject_classes=get_session_variable("subject_classes"), \
@@ -92,5 +119,6 @@ def main():
 
 if __name__ == "__main__":
     DBReader = db_connector.DBFetcher(host="localhost", database="school", user="root", password="1234")
+    DBWriter = db_connector.DBEditor(host="localhost", database="school", user="root", password="1234")
     teacher_lessons, teacher_subclasses = db_get_teacher.get_teacher_info(DBReader)
     app.run(host='0.0.0.0', debug=True)

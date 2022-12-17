@@ -46,47 +46,6 @@ class DBFetcher:
 
         return result
 
-    #def formalize_row_result(self, fetch_row_result: list) -> tuple:
-
-    def get_subclasses_in_class(self, class_num: int) -> tuple:
-        pass
-
-    def get_info_subject(self, week_day: int, lesson_number: int, class_number: int, subclass: str) -> str | None:
-        try:
-            week_day = int(week_day)
-            week_day = self.week[week_day]
-            
-            lesson_number = int(lesson_number)
-            class_number = int(class_number)
-
-            if type(subclass) is not str or len(subclass) != 1:
-                return None
-
-            if lesson_number < 1 or lesson_number > self.MAX_LESSON_NUM:
-                return None
-
-            if class_number < 1 or class_number > 11:
-                return None
-
-        except (ValueError, KeyError):
-            return None
-
-        self.db_cursor.execute('SELECT {} FROM {} WHERE lesson_number = {} AND class = {} AND subclass = "{}"'.format(
-                week_day,
-                self.TABLE_TEACHERS_TIMETABLE_NAME,
-                lesson_number,
-                class_number,
-                subclass
-            )
-        )
-        
-        result = self.db_cursor.fetchone()
-        
-        if result:
-            result = result[0]
-
-        return result
-
 class DBEditor(DBFetcher):
     def save_changes(self) -> bool:
         try:

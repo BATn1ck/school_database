@@ -1,3 +1,14 @@
+{% set week = {
+    1: "Пн",
+    2: "Вт",
+    3: "Ср", 
+    4: "Чт", 
+    5: "Пт",
+    6: "Сб"
+} %}
+{% set amount_classes = 11 %}
+{% set max_lessons_number = 6 %}
+
 {% macro insert_options(options) %}
     {% if options %}
         {% for option in options %}
