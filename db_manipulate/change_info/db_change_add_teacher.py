@@ -36,7 +36,7 @@ def add_teacher(form_teacher: TeacherForm, DBWriter) -> str:
                 subclass
             )
 
-    DBWriter.send_query(query):
+    DBWriter.send_query(query)
     
     if DBWriter.save_changes():
         result = 'Учитель: успешно добавлен'

@@ -4,7 +4,8 @@ import secrets
 from school_web_forms import TeacherForm
 from db_manipulate import db_connector
 
-from db_manipulate.change_info import db_change_add_teacher
+from db_manipulate.change_info import db_change_add_teacher, \
+        db_change_delete_student
 
 from db_manipulate.get_info import db_get_subject, \
         db_get_teacher, \
@@ -28,6 +29,7 @@ def change_info():
 
     if request.method == 'POST':
         #print(request.values)
+        values_dict = request.values.to_dict()
 
         if form_teacher.validate_on_submit():
             res = db_change_add_teacher.add_teacher(form_teacher, DBWriter)
@@ -40,10 +42,22 @@ def change_info():
             form_teacher.class_num = ''
             form_teacher.subclass = ''
 
+        taked_student_delete = db_change_delete_student.delete_student(values_dict, session, DBWriter)
+
         return redirect(request.url)
 
     return render_template('change_info.html', \
-            form_teacher=form_teacher
+            form_teacher=form_teacher, \
+
+            student_delete_class=get_session_variable('student_delete_class'), \
+            student_delete_subclasses=get_session_variable('student_delete_subclasses'), \
+            student_delete_subclass=get_session_variable('student_delete_subclass'), \
+            student_delete_first_names=get_session_variable('student_delete_first_names'), \
+            student_delete_first_name=get_session_variable('student_delete_first_name'), \
+            student_delete_second_names=get_session_variable('student_delete_second_names'), \
+            student_delete_second_name=get_session_variable('student_delete_second_name'), \
+            student_delete_third_names=get_session_variable('student_delete_third_names'), \
+            student_delete_third_name=get_session_variable('student_delete_third_name')
     )
 
 @app.route("/", methods=['GET', 'POST'])
