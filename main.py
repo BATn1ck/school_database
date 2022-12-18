@@ -34,6 +34,9 @@ def change_info():
         if form_teacher.validate_on_submit():
             res = db_change_add_teacher.add_teacher(form_teacher, DBWriter)
 
+            if res:
+                flash(res)
+
             form_teacher.first_name.data = ''
             form_teacher.second_name.data = ''
             form_teacher.third_name.data = ''
@@ -43,6 +46,9 @@ def change_info():
             form_teacher.subclass = ''
 
         taked_student_delete = db_change_delete_student.delete_student(values_dict, session, DBWriter)
+        
+        if taked_student_delete:
+            flash('Ученик успешно удален')
 
         return redirect(request.url)
 
