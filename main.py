@@ -5,7 +5,8 @@ from school_web_forms import TeacherForm
 from db_manipulate import db_connector
 
 from db_manipulate.change_info import db_change_add_teacher, \
-        db_change_delete_student
+        db_change_delete_student, \
+        db_change_student_grade
 
 from db_manipulate.get_info import db_get_subject, \
         db_get_teacher, \
@@ -46,9 +47,13 @@ def change_info():
             form_teacher.subclass = ''
 
         taked_student_delete = db_change_delete_student.delete_student(values_dict, session, DBWriter)
+        taked_student_change_grade = db_change_student_grade.change_grade(values_dict, session, DBWriter)
         
         if taked_student_delete:
             flash('Ученик успешно удален')
+
+        if taked_student_change_grade:
+            flash('Оценка ученика была успешно изменена')
 
         return redirect(request.url)
 
@@ -63,7 +68,20 @@ def change_info():
             student_delete_second_names=get_session_variable('student_delete_second_names'), \
             student_delete_second_name=get_session_variable('student_delete_second_name'), \
             student_delete_third_names=get_session_variable('student_delete_third_names'), \
-            student_delete_third_name=get_session_variable('student_delete_third_name')
+            student_delete_third_name=get_session_variable('student_delete_third_name'), \
+
+            student_grade_class=get_session_variable('student_grade_class'), \
+            student_grade_subclasses=get_session_variable('student_grade_subclasses'), \
+            student_grade_subclass=get_session_variable('student_grade_subclass'), \
+            student_grade_first_names=get_session_variable('student_grade_first_names'), \
+            student_grade_first_name=get_session_variable('student_grade_first_name'), \
+            student_grade_second_names=get_session_variable('student_grade_second_names'), \
+            student_grade_second_name=get_session_variable('student_grade_second_name'), \
+            student_grade_third_names=get_session_variable('student_grade_third_names'), \
+            student_grade_third_name=get_session_variable('student_grade_third_name'), \
+            student_grade_subjects=get_session_variable('student_grade_subjects'), \
+            student_grade_subject=get_session_variable('student_grade_subject'), \
+            student_grade_grade=get_session_variable('student_grade_grade')
     )
 
 @app.route("/", methods=['GET', 'POST'])

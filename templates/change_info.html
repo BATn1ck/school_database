@@ -101,7 +101,7 @@
                 {{ macros.insert_options(student_grade_third_names) }}
             </select>
 
-            <select name="student_grade_third_name" onChange="this.form.submit()">
+            <select name="student_grade_subject" onChange="this.form.submit()">
                 {{ macros.if_option_selected("Предмет", student_grade_subject) }}
                 {{ macros.insert_options(student_grade_subjects) }}
             </select>
@@ -112,7 +112,7 @@
             </select>
 
             <br>
-            <input type="submit" name="subject_get" value="Удалить">
+            <input type="submit" name="student_grade_change" value="Изменить">
         </form>
     </div>
 </div>
