@@ -99,4 +99,112 @@ def get_inquire(values_dict: dict, session, DBReader) -> bool:
             if classrooms:
                 session['cabinets_amount'] = len(classrooms)
 
+    if 'students_classes_amount_get' in values_dict.keys():
+        amount = []
+
+        if values_dict['students_classes_amount_get']:
+            for cl in range(1, 12):
+                query = \
+                        '''
+                        SELECT DISTINCT * FROM {}
+                        WHERE class = {}
+                        '''.format(
+                            DBReader.TABLE_STUDENTS_NAME,
+                            cl
+                        )
+
+                amount_students = DBReader.send_query(query)
+
+                if amount_students:
+                    amount_students = len(amount_students)
+                else:
+                    amount_students = 0
+
+                amount.append(amount_students)
+        
+        session['students_classes_amount'] = amount
+
+    if 'students_progress_class' in values_dict.keys():
+        stud_class = values_dict['students_progress_class']
+
+        try:
+            stud_class = int(stud_class)
+
+            if get_session_variable('students_progress_class') != stud_class and \
+                    stud_class >= 1 and stud_class <= 11:
+                session['students_progress_class'] = stud_class
+                session['students_progress_subclasses'] = []
+                session['students_progress_subclass'] = ''
+                session['students_progress_losers_amount'] = 0
+                session['students_progress_good_amount'] = 0
+                session['students_progress_excellent_amount'] = 0
+
+                query = \
+                        '''
+                        SELECT DISTINCT subclass FROM {}
+                        WHERE class = {}
+                        '''.format(
+                            DBReader.TABLE_STUDENTS_NAME,
+                            get_session_variable('students_progress_class')
+                        )
+
+                stud_subclasses = DBReader.send_query(query)
+
+                if stud_subclasses:
+                    stud_subclasses = [subcl[0] for subcl in stud_subclasses]
+                    session['students_progress_subclasses'] = stud_subclasses
+
+        except (ValueError, TypeError):
+            pass
+
+    if 'students_progress_subclass' in values_dict.keys():
+        stud_subclass = values_dict['students_progress_subclass']
+
+        if get_session_variable('students_progress_subclass') != stud_subclass and \
+                type(stud_subclass) is str and \
+                len(stud_subclass) == 1:
+            session['students_progress_subclass'] = stud_subclass
+            session['students_progress_losers_amount'] = 0
+            session['students_progress_good_amount'] = 0
+            session['students_progress_excellent_amount'] = 0
+
+            query = \
+                    '''
+                    SELECT * FROM {}
+                    WHERE class = {}
+                    AND subclass = "{}"
+                    '''.format(
+                        DBReader.TABLE_STUDENTS_NAME,
+                        get_session_variable('students_progress_class'),
+                        get_session_variable('students_progress_subclass')
+                    )
+
+            grades = DBReader.send_query(query)
+            amount_losers = 0
+            amount_good = 0
+            amount_excellent = 0
+
+            if grades:
+                for stud_grades in grades:
+                    n_grades = 0
+                    average = 0
+
+                    for gr in stud_grades[5:]:
+                        if gr:
+                            average += gr
+                            n_grades += 1
+
+                    average /= n_grades
+
+                    if average < 3:
+                        amount_losers += 1
+                    elif average >= 4 and average < 5:
+                        amount_good += 1
+                    elif average == 5:
+                        amount_excellent += 1
+
+            session['students_progress_losers_amount'] = amount_losers
+            session['students_progress_good_amount'] = amount_good
+            session['students_progress_excellent_amount'] = amount_excellent
+
     return result

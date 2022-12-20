@@ -54,7 +54,17 @@ def get_inquiry():
         teachers_subject=get_session_variable('teachers_subject'), \
         taked_teachers_amount=get_session_variable('teachers_amount'), \
 
-        taked_cabinets_amount=get_session_variable('cabinets_amount')
+        taked_cabinets_amount=get_session_variable('cabinets_amount'), \
+
+        taked_students_classes_amount=get_session_variable('students_classes_amount'), \
+
+
+        students_progress_class=get_session_variable('students_progress_class'), \
+        students_progress_subclasses=get_session_variable('students_progress_subclasses'), \
+        students_progress_subclass=get_session_variable('students_progress_subclass'), \
+        taked_loser_amount=get_session_variable('students_progress_losers_amount'), \
+        taked_good_amount=get_session_variable('students_progress_good_amount'), \
+        taked_excellent_amount=get_session_variable('students_progress_excellent_amount')
     )
 
 @app.route("/change_info.html", methods=['GET', 'POST'])
@@ -62,7 +72,6 @@ def change_info():
     form_teacher = TeacherForm()
 
     if request.method == 'POST':
-        #print(request.values)
         values_dict = request.values.to_dict()
 
         if form_teacher.validate_on_submit():

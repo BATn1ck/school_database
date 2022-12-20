@@ -56,8 +56,9 @@
 
         <h2>Количество учеников по классам:</h2>
         {% if taked_students_classes_amount %}
-            {% for cl in taked_students_classes_amount.keys() %}
-                {{ cl }}: {{ taked_students_classes_amount[cl] }}
+            {% for cl in range(macros.amount_classes) %}
+                <h4>{{ cl+1 }} классы: {{ taked_students_classes_amount[cl] }}</h4>
+                <br>
             {% endfor %}
         {% endif %}
     </div>
