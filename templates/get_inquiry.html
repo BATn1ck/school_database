@@ -1,0 +1,97 @@
+{% extends "layout.html" %}
+{% import "macros.html" as macros %}
+
+{% block content %}
+<div class='container'>
+    <div class='page-header'>
+        <form method="POST">
+            <select name="students_class" onChange="this.form.submit()">
+                {{ macros.if_option_selected("Класс", students_class) }}
+                {{ macros.insert_options(range(1, macros.amount_classes+1)) }}
+            </select>
+
+            <select name="students_subclass" onChange="this.form.submit()">
+                {{ macros.if_option_selected("Подкласс", students_subclass) }}
+                {{ macros.insert_options(students_subclasses) }}
+            </select>
+        </form>
+        <h2>Количество учеников:
+            {% if taked_students %}
+                <i><b>{{ taked_students }}</b></i>
+            {% endif %}
+        </h2>
+    </div>
+
+    <div class='page-header'>
+        <form method="POST">
+            <select name="teachers_subject_amount" onChange="this.form.submit()">
+                {{ macros.if_option_selected("Предмет", teachers_subject) }}
+                {{ macros.insert_options(teachers_subjects) }}
+            </select>
+        </form>
+
+        <h2>Количество учителей по предмету:
+            {% if taked_teachers_amount %}
+                <i><b>{{ taked_teachers_amount }}</b></i>
+            {% endif %}
+        </h2>
+    </div>
+
+    <div class='page-header'>
+        <form method="POST">
+            <input type="submit" name="cabinets_amount_get" value="Получить">
+        </form>
+
+        <h2>Количество кабинетов:
+            {% if taked_cabinets_amount %}
+                <i><b>{{ taked_cabinets_amount }}</b></i>
+            {% endif %}
+        </h2>
+    </div>
+
+    <div class='page-header'>
+        <form method="POST">
+            <input type="submit" name="students_classes_amount_get" value="Получить">
+        </form>
+
+        <h2>Количество учеников по классам:</h2>
+        {% if taked_students_classes_amount %}
+            {% for cl in taked_students_classes_amount.keys() %}
+                {{ cl }}: {{ taked_students_classes_amount[cl] }}
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <div class='page-header'>
+        <form method="POST">
+            <select name="students_progress_class" onChange="this.form.submit()">
+                {{ macros.if_option_selected("Класс", students_progress_class) }}
+                {{ macros.insert_options(range(1, macros.amount_classes+1)) }}
+            </select>
+
+            <select name="students_progress_subclass" onChange="this.form.submit()">
+                {{ macros.if_option_selected("Подкласс", students_progress_subclass) }}
+                {{ macros.insert_options(students_progress_subclasses) }}
+            </select>
+        </form>
+
+        <h2>Двоечники:
+            {% if taked_loser_amount %}
+                <i><b>{{ taked_loser_amount }}</b></i>
+            {% endif %}
+        </h2>
+
+        <h2>Хорошисты:
+            {% if taked_good_amount %}
+                <i><b>{{ taked_good_amount }}</b></i>
+            {% endif %}
+        </h2>
+
+        <h2>Отличники:
+            {% if taked_excellent_amount %}
+                <i><b>{{ taked_excellent_amount }}</b></i>
+            {% endif %}
+        </h2>
+    </div>
+</div>
+{% endblock %}

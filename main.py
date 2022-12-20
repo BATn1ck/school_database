@@ -2,7 +2,7 @@
 import secrets 
 
 from school_web_forms import TeacherForm
-from db_manipulate import db_connector
+from db_manipulate import db_connector, db_get_inquires
 
 from db_manipulate.change_info import db_change_add_teacher, \
         db_change_delete_student, \
@@ -23,6 +23,39 @@ bootstrap = Bootstrap(app)
 
 get_session_variable = lambda session_variable: \
         session[session_variable] if session_variable in session.keys() else None
+
+@app.route("/get_inquiry.html", methods=['GET', 'POST'])
+def get_inquiry():
+    query = \
+            '''
+            SELECT DISTINCT subject FROM {}
+            '''.format(
+                DBReader.TABLE_TEACHERS_NAME
+            )
+
+    teachers_subjects = DBReader.send_query(query)
+
+    if teachers_subjects:
+        teachers_subjects = [ts[0] for ts in teachers_subjects]
+
+    if request.method == 'POST':
+        values_dict = request.values.to_dict()
+        db_get_inquires.get_inquire(values_dict, session, DBReader)
+
+        return redirect(request.url)
+
+    return render_template('get_inquiry.html',
+        students_class=get_session_variable('students_class'), \
+        students_subclasses=get_session_variable('students_subclasses'), \
+        students_subclass=get_session_variable('students_subclass'), \
+        taked_students=get_session_variable('students_amount'), \
+
+        teachers_subjects=teachers_subjects, \
+        teachers_subject=get_session_variable('teachers_subject'), \
+        taked_teachers_amount=get_session_variable('teachers_amount'), \
+
+        taked_cabinets_amount=get_session_variable('cabinets_amount')
+    )
 
 @app.route("/change_info.html", methods=['GET', 'POST'])
 def change_info():
