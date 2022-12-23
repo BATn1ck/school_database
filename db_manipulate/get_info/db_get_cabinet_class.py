@@ -116,13 +116,12 @@ def handle_cabinet_class(values_dict: dict, session, DBReader) -> str | None:
 
             cabinet_class_query = \
             '''
-            SELECT {} FROM {}
+            SELECT classroom FROM {}
             WHERE lesson_number = {}
             AND class = {}
             AND subclass = "{}" 
             AND {} IS NOT NULL
             '''.format(
-                    DBReader.week[get_session_variable("cabinet_class_day_week")],
                     DBReader.TABLE_TEACHERS_TIMETABLE_NAME,
                     get_session_variable("cabinet_class_lesson_num"),
                     get_session_variable("cabinet_class_class"),
