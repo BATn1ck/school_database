@@ -248,5 +248,12 @@ def change_grade(values_dict: dict, session, DBWriter) -> bool:
 
             DBWriter.send_query(query)
             result = DBWriter.save_changes()
+            session['student_grade_subject'] = ''
+            session['student_grade_grade'] = 0
+            session['student_grade_class'] = 0
+            session['student_grade_subclass'] = ''
+            session['student_grade_first_name'] = ''
+            session['student_grade_second_name'] = ''
+            session['student_grade_third_name'] = ''
 
     return result
